@@ -1,0 +1,4 @@
+/config/default.ts
+node_modules/
+*.lock
+*.log
