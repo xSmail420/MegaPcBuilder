@@ -4,12 +4,14 @@ import { MessageController } from './controllers/message.controller';
 import { UserController } from './controllers/user.controller';
 import { ChatroomController } from './controllers/chatroom.controller';
 import { UserPersonalisationController } from './controllers/personalisation.controller';
+import { BuildController } from './controllers/builder.controller';
 
 function routes(app: Express, db: Firestore) {
   const userController = new UserController(db)
   const chatroomController = new ChatroomController(db)
   const messageController = new MessageController(db)
   const userPersonalisationController = new UserPersonalisationController(db)
+  const buildController = new BuildController(db)
 
   /**
   
@@ -475,6 +477,110 @@ function routes(app: Express, db: Firestore) {
   app.get('/api/v1/personalisation/:user_id', (req, res) => {
     userPersonalisationController.getUserPersonalisation(req, res)
   })
+
+  /* Builder Route */
+/**
+ * @openapi
+ * '/api/v1/builds':
+ *  post:
+ *    tags:
+ *      - Build
+ *    summary: Create a new build
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            $ref: '#/components/schemas/CreateBuildRequest'
+ *    responses:
+ *      200:
+ *        description: Success
+ */
+app.post('/api/v1/builds', (req, res) => {
+  buildController.createBuild(req, res);
+});
+
+/**
+ * @openapi
+ * '/api/v1/builds/{build_id}':
+ *  delete:
+ *    tags: 
+ *      - Build
+ *    summary: Delete a build
+ *    parameters:
+ *      - name: build_id
+ *        in: path
+ *        description: Build ID
+ *        required: true
+ *    responses:
+ *      200:
+ *        description: Success
+ */ 
+app.delete('/api/v1/builds/:build_id', (req, res) => {
+  buildController.deleteBuild(req, res);
+});
+
+/**
+ * @openapi
+ * '/api/v1/builds/{build_id}':
+ *  get:
+ *    tags: 
+ *      - Build
+ *    summary: Get data of a build
+ *    parameters:
+ *      - name: build_id
+ *        in: path
+ *        description: Build ID
+ *        required: true
+ *    responses:
+ *      200:
+ *        description: Success
+ */ 
+app.get('/api/v1/builds/:build_id', (req, res) => {
+  buildController.showBuildData(req, res);
+});
+
+/**
+ * @openapi
+ * '/api/v1/builds/{build_id}':
+ *  put:
+ *    tags: 
+ *      - Build
+ *    summary: Update data of a build
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            $ref: '#/components/schemas/UpdateBuildRequest'
+ *    parameters:
+ *      - name: build_id
+ *        in: path
+ *        description: Build ID
+ *        required: true
+ *    responses:
+ *      200:
+ *        description: Success
+ */ 
+app.put('/api/v1/builds/:build_id', (req, res) => {
+  buildController.updateBuild(req, res);
+});
+
+/**
+ * @openapi
+ * '/api/v1/builds':
+ *  get:
+ *    tags:
+ *      - Build
+ *    summary: Get all builds
+ *    responses:
+ *      200:
+ *        description: Success
+ */
+app.get('/api/v1/builds', (req, res) => {
+  buildController.showAllBuildData(req, res);
+});
+
 
   /* Nonexisting Route handling */
   app.all('*', (req, res) => {
