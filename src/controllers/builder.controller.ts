@@ -103,7 +103,9 @@ export class BuildController {
 
   async createBuild(req: Request, res: Response) {
     try {
+      const buildId = uuidv4();
       const buildData: BuildModel = {
+        buildId : buildId,
         PROCESSEUR: req.body.PROCESSEUR || [],
         REFROIDISSEMENT: req.body.REFROIDISSEMENT || [],
         CARTE_MERE: req.body.CARTE_MERE || [],
@@ -117,7 +119,7 @@ export class BuildController {
         dateCreated: admin.firestore.Timestamp.now(),
       };
 
-      const buildId = uuidv4();
+      // Saving build to firestore
       const buildRef = this.db.collection("builds").doc(buildId);
       await buildRef.set(buildData);
 

@@ -49,6 +49,7 @@ import { ComponentModel } from "./component.module";
  */
 
 export interface BuildModel {
+  buildId: string;
   PROCESSEUR?: Partial<ComponentModel>[];
   REFROIDISSEMENT?: Partial<ComponentModel>[];
   CARTE_MERE?: Partial<ComponentModel>[];
