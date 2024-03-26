@@ -4,6 +4,8 @@ import * as admin from "firebase-admin";
 import { Firestore } from "@google-cloud/firestore";
 import { ResponseUtils } from "../utils/response.utils";
 import { BuildModel } from "../models/build.model";
+import { generateComputerBuild } from "../utils/aibuilder.utils";
+import { filterComponentsByBudget } from "../utils/components.utils";
 
 export class BuildController {
   constructor(private db: Firestore) {}
@@ -101,11 +103,68 @@ export class BuildController {
    *                      $ref: '#/definitions/ComponentModel'
    */
 
+  async generateBuild(req: Request, res: Response) {
+    try {
+      // Get user input from request body (assuming price and purpose are provided)
+      const userInput = {
+        budget: req.body.budget || 0, // Default to 0 if not provided
+        purpose: req.body.purpose || "", // Default to empty string if not provided
+        prefs: req.body.prefs || "", // Default to empty string if not provided
+      };
+
+      // Filter components by budget
+      const filteredComponents = await filterComponentsByBudget(
+        userInput.budget
+      );
+
+      // Generate computer build using OpenAI API and filteredComponents as context
+      const generatedBuild = await generateComputerBuild(
+        filteredComponents,
+        userInput
+      );
+
+      // Create build data
+      const buildId = uuidv4();
+
+      // Remove leading/trailing whitespaces and line breaks, replace single quotes with double quotes
+      const cleanedJsonString = generatedBuild.trim().replace(/'/g, '"');
+
+      // Parse the JSON string into a JavaScript object
+      const buildData: Partial<BuildModel> = JSON.parse(cleanedJsonString);
+
+      const finalBuildData: BuildModel = {
+        ...buildData,
+        buildId: buildId,
+        dateCreated: admin.firestore.Timestamp.now(),
+      };
+
+      //save build data to firestore
+      const buildRef = this.db.collection("builds").doc(buildId);
+      await buildRef.set(finalBuildData);
+
+      // Sending success response
+      return ResponseUtils.sendSuccessResponse(
+        res,
+        200,
+        "Build created successfully",
+        finalBuildData
+      );
+    } catch (error: any) {
+      // Sending error response
+      return ResponseUtils.sendErrorResponse(
+        res,
+        500,
+        "Failed to create build",
+        error
+      );
+    }
+  }
+
   async createBuild(req: Request, res: Response) {
     try {
       const buildId = uuidv4();
       const buildData: BuildModel = {
-        buildId : buildId,
+        buildId: buildId,
         PROCESSEUR: req.body.PROCESSEUR || [],
         REFROIDISSEMENT: req.body.REFROIDISSEMENT || [],
         CARTE_MERE: req.body.CARTE_MERE || [],

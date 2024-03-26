@@ -1,17 +1,17 @@
-import { Express } from 'express'
-import { Firestore } from '@google-cloud/firestore'
-import { MessageController } from './controllers/message.controller';
-import { UserController } from './controllers/user.controller';
-import { ChatroomController } from './controllers/chatroom.controller';
-import { UserPersonalisationController } from './controllers/personalisation.controller';
-import { BuildController } from './controllers/builder.controller';
+import { Express } from "express";
+import { Firestore } from "@google-cloud/firestore";
+import { MessageController } from "./controllers/message.controller";
+import { UserController } from "./controllers/user.controller";
+import { ChatroomController } from "./controllers/chatroom.controller";
+import { UserPersonalisationController } from "./controllers/personalisation.controller";
+import { BuildController } from "./controllers/builder.controller";
 
 function routes(app: Express, db: Firestore) {
-  const userController = new UserController(db)
-  const chatroomController = new ChatroomController(db)
-  const messageController = new MessageController(db)
-  const userPersonalisationController = new UserPersonalisationController(db)
-  const buildController = new BuildController(db)
+  const userController = new UserController(db);
+  const chatroomController = new ChatroomController(db);
+  const messageController = new MessageController(db);
+  const userPersonalisationController = new UserPersonalisationController(db);
+  const buildController = new BuildController(db);
 
   /**
   
@@ -20,16 +20,16 @@ function routes(app: Express, db: Firestore) {
    * @openapi
    * '/api/v1/healthcheck':
    *  get:
-   *    tags: 
+   *    tags:
    *      - Healthcheck
    *    summary: Get the status of the server
    *    responses:
    *      200:
    *        description: Success
    */
-  app.get('/api/v1/healthcheck', (req, res) => {
+  app.get("/api/v1/healthcheck", (req, res) => {
     res.sendStatus(200);
-  })
+  });
 
   /* Chatroom Routes */
   /**
@@ -49,15 +49,15 @@ function routes(app: Express, db: Firestore) {
    *      200:
    *        description: Success
    */
-  app.post('/api/v1/chatrooms', (req, res) => {
-    chatroomController.createChatroom(req, res)
-  })
+  app.post("/api/v1/chatrooms", (req, res) => {
+    chatroomController.createChatroom(req, res);
+  });
 
   /**
    * @openapi
    * '/api/v1/chatrooms/{chatroom_id}':
    *  delete:
-   *    tags: 
+   *    tags:
    *      - Chatroom
    *    summary: Delete data of a chatroom
    *    parameters:
@@ -68,16 +68,16 @@ function routes(app: Express, db: Firestore) {
    *    responses:
    *      200:
    *        description: Success
-   */ 
-  app.delete('/api/v1/chatrooms/:chatroom_id', (req, res) => {
-    chatroomController.deleteChatroom(req, res)
-  })
+   */
+  app.delete("/api/v1/chatrooms/:chatroom_id", (req, res) => {
+    chatroomController.deleteChatroom(req, res);
+  });
 
   /**
    * @openapi
    * '/api/v1/chatrooms/{chatroom_id}':
    *  put:
-   *    tags: 
+   *    tags:
    *      - Chatroom
    *    summary: Update data of a chatroom
    *    requestBody:
@@ -94,10 +94,10 @@ function routes(app: Express, db: Firestore) {
    *    responses:
    *      200:
    *        description: Success
-   */ 
-  app.put('/api/v1/chatrooms/:chatroom_id', (req, res) => {
-    chatroomController.updateChatroom(req, res)
-  })
+   */
+  app.put("/api/v1/chatrooms/:chatroom_id", (req, res) => {
+    chatroomController.updateChatroom(req, res);
+  });
 
   /**
    * @openapi
@@ -115,9 +115,9 @@ function routes(app: Express, db: Firestore) {
    *      200:
    *        description: Success
    */
-  app.get('/api/v1/chatrooms/:chatroom_id', (req, res) => {
-    chatroomController.showChatroomData(req, res)
-  })
+  app.get("/api/v1/chatrooms/:chatroom_id", (req, res) => {
+    chatroomController.showChatroomData(req, res);
+  });
 
   /**
    * @openapi
@@ -130,9 +130,9 @@ function routes(app: Express, db: Firestore) {
    *      200:
    *        description: Success
    */
-  app.get('/api/v1/chatrooms/', (req, res) => {
-    chatroomController.showAllChatroomData(req, res)
-  })
+  app.get("/api/v1/chatrooms/", (req, res) => {
+    chatroomController.showAllChatroomData(req, res);
+  });
 
   /**
    * @openapi
@@ -150,9 +150,9 @@ function routes(app: Express, db: Firestore) {
    *      200:
    *        description: Success
    */
-  app.get('/api/v1/chatrooms/users/:user_id', (req, res) => {
-    chatroomController.showChatroomDataByUserId(req, res)
-  })
+  app.get("/api/v1/chatrooms/users/:user_id", (req, res) => {
+    chatroomController.showChatroomDataByUserId(req, res);
+  });
 
   /**
    * @openapi
@@ -170,9 +170,9 @@ function routes(app: Express, db: Firestore) {
    *      200:
    *        description: Success
    */
-  app.delete('/api/v1/chatrooms/users/:user_id', (req, res) => {
-    chatroomController.deleteAllChatroom(req, res)
-  })
+  app.delete("/api/v1/chatrooms/users/:user_id", (req, res) => {
+    chatroomController.deleteAllChatroom(req, res);
+  });
 
   /* Message Routes */
   /**
@@ -197,9 +197,9 @@ function routes(app: Express, db: Firestore) {
    *      200:
    *        description: Success
    */
-  app.post('/api/v1/messages/:chatroom_id', (req, res) => {
-    messageController.addMessage(req, res)
-  })
+  app.post("/api/v1/messages/:chatroom_id", (req, res) => {
+    messageController.addMessage(req, res);
+  });
 
   /**
    * @openapi
@@ -221,10 +221,10 @@ function routes(app: Express, db: Firestore) {
    *      200:
    *        description: Success
    */
-  app.delete('/api/v1/messages/:chatroom_id/:message_id', (req, res) => {
-    messageController.deleteMessage(req, res)
-  })
-  
+  app.delete("/api/v1/messages/:chatroom_id/:message_id", (req, res) => {
+    messageController.deleteMessage(req, res);
+  });
+
   /**
    * @openapi
    * '/api/v1/messages/{chatroom_id}/{message_id}':
@@ -251,9 +251,9 @@ function routes(app: Express, db: Firestore) {
    *      200:
    *        description: Success
    */
-  app.put('/api/v1/messages/:chatroom_id/:message_id', (req, res) => {
-    messageController.updateMessage(req, res)
-  })
+  app.put("/api/v1/messages/:chatroom_id/:message_id", (req, res) => {
+    messageController.updateMessage(req, res);
+  });
 
   /**
    * @openapi
@@ -275,9 +275,9 @@ function routes(app: Express, db: Firestore) {
    *      200:
    *        description: Success
    */
-  app.get('/api/v1/messages/show/:chatroom_id/:message_id', (req, res) => {
-    messageController.showMessageData(req, res)
-  })
+  app.get("/api/v1/messages/show/:chatroom_id/:message_id", (req, res) => {
+    messageController.showMessageData(req, res);
+  });
 
   /* User Route */
   /**
@@ -302,15 +302,15 @@ function routes(app: Express, db: Firestore) {
    *      200:
    *        description: Success
    */
-  app.post('/api/v1/users', (req, res) => {
-    userController.createUser(req, res)
-  })
+  app.post("/api/v1/users", (req, res) => {
+    userController.createUser(req, res);
+  });
 
   /**
    * @openapi
    * '/api/v1/users/{user_id}':
    *  delete:
-   *    tags: 
+   *    tags:
    *      - User
    *    summary: Delete data of a user
    *    parameters:
@@ -321,16 +321,16 @@ function routes(app: Express, db: Firestore) {
    *    responses:
    *      200:
    *        description: Success
-   */ 
-  app.delete('/api/v1/users/:user_id', (req, res) => {
-    userController.deleteUser(req, res)
-  })
+   */
+  app.delete("/api/v1/users/:user_id", (req, res) => {
+    userController.deleteUser(req, res);
+  });
 
   /**
    * @openapi
    * '/api/v1/users/{user_id}':
    *  get:
-   *    tags: 
+   *    tags:
    *      - User
    *    summary: Get data of a user
    *    parameters:
@@ -341,16 +341,16 @@ function routes(app: Express, db: Firestore) {
    *    responses:
    *      200:
    *        description: Success
-   */ 
-  app.get('/api/v1/users/:user_id', (req, res) => {
-    userController.showUserData(req, res)
-  })
+   */
+  app.get("/api/v1/users/:user_id", (req, res) => {
+    userController.showUserData(req, res);
+  });
 
   /**
    * @openapi
    * '/api/v1/users/{user_id}':
    *  put:
-   *    tags: 
+   *    tags:
    *      - User
    *    summary: Update data of a user
    *    requestBody:
@@ -367,10 +367,10 @@ function routes(app: Express, db: Firestore) {
    *    responses:
    *      200:
    *        description: Success
-   */ 
-  app.put('/api/v1/users/:user_id', (req, res) => {
-    userController.updateUser(req, res)
-  })
+   */
+  app.put("/api/v1/users/:user_id", (req, res) => {
+    userController.updateUser(req, res);
+  });
 
   /**
    * @openapi
@@ -383,9 +383,9 @@ function routes(app: Express, db: Firestore) {
    *      200:
    *        description: Success
    */
-  app.get('/api/v1/users', (req, res) => {
-    userController.showAllUserData(req, res)
-  })
+  app.get("/api/v1/users", (req, res) => {
+    userController.showAllUserData(req, res);
+  });
 
   /* Personalisation Route */
   /**
@@ -410,9 +410,9 @@ function routes(app: Express, db: Firestore) {
    *      200:
    *        description: Success
    */
-  app.post('/api/v1/personalisation/:user_id', (req, res) => {
-    userPersonalisationController.createUserPersonalisation(req, res)
-  })
+  app.post("/api/v1/personalisation/:user_id", (req, res) => {
+    userPersonalisationController.createUserPersonalisation(req, res);
+  });
 
   /**
    * @openapi
@@ -436,9 +436,9 @@ function routes(app: Express, db: Firestore) {
    *      200:
    *        description: Success
    */
-  app.put('/api/v1/personalisation/:user_id', (req, res) => {
-    userPersonalisationController.saveUserPersonalisation(req, res)
-  })
+  app.put("/api/v1/personalisation/:user_id", (req, res) => {
+    userPersonalisationController.saveUserPersonalisation(req, res);
+  });
 
   /**
    * @openapi
@@ -455,9 +455,9 @@ function routes(app: Express, db: Firestore) {
    *      200:
    *        description: Success
    */
-  app.delete('/api/v1/personalisation/:user_id', (req, res) => {
-    userPersonalisationController.deleteUserPersonalisation(req, res)
-  })
+  app.delete("/api/v1/personalisation/:user_id", (req, res) => {
+    userPersonalisationController.deleteUserPersonalisation(req, res);
+  });
 
   /**
    * @openapi
@@ -474,118 +474,137 @@ function routes(app: Express, db: Firestore) {
    *      200:
    *        description: Success
    */
-  app.get('/api/v1/personalisation/:user_id', (req, res) => {
-    userPersonalisationController.getUserPersonalisation(req, res)
-  })
+  app.get("/api/v1/personalisation/:user_id", (req, res) => {
+    userPersonalisationController.getUserPersonalisation(req, res);
+  });
 
   /* Builder Route */
-/**
- * @openapi
- * '/api/v1/builds':
- *  post:
- *    tags:
- *      - Build
- *    summary: Create a new build
- *    requestBody:
- *      required: true
- *      content:
- *        application/json:
- *          schema:
- *            $ref: '#/components/schemas/CreateBuildRequest'
- *    responses:
- *      200:
- *        description: Success
- */
-app.post('/api/v1/builds', (req, res) => {
-  buildController.createBuild(req, res);
-});
+  /**
+   * @openapi
+   * '/api/v1/builds':
+   *  post:
+   *    tags:
+   *      - Build
+   *    summary: Create a new build
+   *    requestBody:
+   *      required: true
+   *      content:
+   *        application/json:
+   *          schema:
+   *            $ref: '#/components/schemas/CreateBuildRequest'
+   *    responses:
+   *      200:
+   *        description: Success
+   */
+  app.post("/api/v1/builds", (req, res) => {
+    buildController.createBuild(req, res);
+  });
+  /**
+   * @openapi
+   * '/api/v1/aibuilder':
+   *  post:
+   *    tags:
+   *      - Build
+   *    summary: Generate a new build using ai
+   *    requestBody:
+   *      required: true
+   *      content:
+   *        application/json:
+   *          schema:
+   *            $ref: '#/components/schemas/CreateBuildRequest'
+   *    responses:
+   *      200:
+   *        description: Success
+   */
+  app.post("/api/v1/aibuilder", (req, res) => {
+    buildController.generateBuild(req, res);
+  });
 
-/**
- * @openapi
- * '/api/v1/builds/{build_id}':
- *  delete:
- *    tags: 
- *      - Build
- *    summary: Delete a build
- *    parameters:
- *      - name: build_id
- *        in: path
- *        description: Build ID
- *        required: true
- *    responses:
- *      200:
- *        description: Success
- */ 
-app.delete('/api/v1/builds/:build_id', (req, res) => {
-  buildController.deleteBuild(req, res);
-});
+  /**
+   * @openapi
+   * '/api/v1/builds/{build_id}':
+   *  delete:
+   *    tags:
+   *      - Build
+   *    summary: Delete a build
+   *    parameters:
+   *      - name: build_id
+   *        in: path
+   *        description: Build ID
+   *        required: true
+   *    responses:
+   *      200:
+   *        description: Success
+   */
+  app.delete("/api/v1/builds/:build_id", (req, res) => {
+    buildController.deleteBuild(req, res);
+  });
 
-/**
- * @openapi
- * '/api/v1/builds/{build_id}':
- *  get:
- *    tags: 
- *      - Build
- *    summary: Get data of a build
- *    parameters:
- *      - name: build_id
- *        in: path
- *        description: Build ID
- *        required: true
- *    responses:
- *      200:
- *        description: Success
- */ 
-app.get('/api/v1/builds/:build_id', (req, res) => {
-  buildController.showBuildData(req, res);
-});
+  /**
+   * @openapi
+   * '/api/v1/builds/{build_id}':
+   *  get:
+   *    tags:
+   *      - Build
+   *    summary: Get data of a build
+   *    parameters:
+   *      - name: build_id
+   *        in: path
+   *        description: Build ID
+   *        required: true
+   *    responses:
+   *      200:
+   *        description: Success
+   */
+  app.get("/api/v1/builds/:build_id", (req, res) => {
+    buildController.showBuildData(req, res);
+  });
 
-/**
- * @openapi
- * '/api/v1/builds/{build_id}':
- *  put:
- *    tags: 
- *      - Build
- *    summary: Update data of a build
- *    requestBody:
- *      required: true
- *      content:
- *        application/json:
- *          schema:
- *            $ref: '#/components/schemas/UpdateBuildRequest'
- *    parameters:
- *      - name: build_id
- *        in: path
- *        description: Build ID
- *        required: true
- *    responses:
- *      200:
- *        description: Success
- */ 
-app.put('/api/v1/builds/:build_id', (req, res) => {
-  buildController.updateBuild(req, res);
-});
+  /**
+   * @openapi
+   * '/api/v1/builds/{build_id}':
+   *  put:
+   *    tags:
+   *      - Build
+   *    summary: Update data of a build
+   *    requestBody:
+   *      required: true
+   *      content:
+   *        application/json:
+   *          schema:
+   *            $ref: '#/components/schemas/UpdateBuildRequest'
+   *    parameters:
+   *      - name: build_id
+   *        in: path
+   *        description: Build ID
+   *        required: true
+   *    responses:
+   *      200:
+   *        description: Success
+   */
+  app.put("/api/v1/builds/:build_id", (req, res) => {
+    buildController.updateBuild(req, res);
+  });
 
-/**
- * @openapi
- * '/api/v1/builds':
- *  get:
- *    tags:
- *      - Build
- *    summary: Get all builds
- *    responses:
- *      200:
- *        description: Success
- */
-app.get('/api/v1/builds', (req, res) => {
-  buildController.showAllBuildData(req, res);
-});
-
+  /**
+   * @openapi
+   * '/api/v1/builds':
+   *  get:
+   *    tags:
+   *      - Build
+   *    summary: Get all builds
+   *    responses:
+   *      200:
+   *        description: Success
+   */
+  app.get("/api/v1/builds", (req, res) => {
+    buildController.showAllBuildData(req, res);
+  });
 
   /* Nonexisting Route handling */
-  app.all('*', (req, res) => {
-    res.status(404).json({ error: 'Cannot access route' });
+  app.all("*", (req, res) => {
+    res.status(404).json({ error: "Cannot access route" });
   });
 }
 
-export default routes
+export default routes;

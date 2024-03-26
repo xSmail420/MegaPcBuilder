@@ -10,6 +10,7 @@ const app = express();
 const port = config.get<number>('port');
 export const model = new OpenAI({
   openAIApiKey: config.get("OPEN_AI_API_KEY"),
+  temperature: 0,
   modelName: "gpt-3.5-turbo"
 });
 

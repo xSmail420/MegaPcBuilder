@@ -58,6 +58,7 @@ export interface BuildModel {
   DISQUE_SSD?: Partial<ComponentModel>[];
   DISQUE_HDD?: Partial<ComponentModel>[];
   DISQUE_NVME?: Partial<ComponentModel>[];
+  STORAGE?: Partial<ComponentModel>[];
   VENTILATEUR?: Partial<ComponentModel>[];
   CARTE_GRAPHIQUE?: Partial<ComponentModel>[];
   dateCreated: admin.firestore.Timestamp;

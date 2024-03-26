@@ -25,5 +25,5 @@ export interface ComponentModel {
   stock: number;
   lien?: string;
   nFilsCategs?: string;
-  attributes?: { [key: string]: string };
+  attributes?: any;
 }
