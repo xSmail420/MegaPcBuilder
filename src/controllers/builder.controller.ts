@@ -3,13 +3,13 @@ import { v4 as uuidv4 } from "uuid";
 import * as admin from "firebase-admin";
 import { Firestore } from "@google-cloud/firestore";
 import { ResponseUtils } from "../utils/response.utils";
-import { BuildDataModel, BuildModel } from "../models/build.model";
+import { BuildDataModel, BuildExampleModel, BuildModel, IBuildModel } from "../models/build.model";
 import { generateComputerBuild } from "../utils/aibuilder.utils";
 import {
   componentTypes,
   filterComponentsByBudget,
+  getComponentData,
 } from "../utils/components.utils";
-import { ComponentModel } from "../models/component.module";
 
 export class BuildController {
   constructor(private db: Firestore) {}
@@ -127,7 +127,8 @@ export class BuildController {
 
       // Filter components by budget
       const filteredComponents = await filterComponentsByBudget(
-        userInput.budget
+        userInput.budget,
+        this.db
       );
 
       // Generate computer build using OpenAI API and filteredComponents as context
@@ -146,7 +147,7 @@ export class BuildController {
       const buildData: Partial<BuildModel> = JSON.parse(cleanedJsonString);
 
       // Initialize fullBuildData with buildId
-      const fullBuildData: Partial<BuildModel> = {
+      const fullBuildData: Partial<IBuildModel> = {
         buildId: buildId,
         dateCreated: admin.firestore.Timestamp.now(),
       };
@@ -162,6 +163,7 @@ export class BuildController {
         if (component && component.lien) {
           const componentLien = component.lien;
           let matchingComponent;
+          let dataComponent;
           for (let item of filteredComponents[key]) {
             if (
               item.lien.replace(/-/g, " ").toLowerCase() ===
@@ -171,10 +173,13 @@ export class BuildController {
               break;
             }
           }
-
-          if (matchingComponent) {
+          if (!matchingComponent) {
+            continue;
+          }
+          dataComponent = await getComponentData(matchingComponent.lien, this.db);
+          if (dataComponent) {
             // Assuming you want to take the first matching component
-            fullBuildData[key as keyof BuildDataModel] = matchingComponent;
+            fullBuildData[key as keyof BuildExampleModel] = dataComponent;
           }
         }
       }
