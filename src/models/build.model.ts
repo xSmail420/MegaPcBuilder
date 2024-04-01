@@ -66,3 +66,21 @@ export interface BuildDataModel {
   VENTILATEUR?: Partial<ComponentModel>;
   CARTE_GRAPHIQUE?: Partial<ComponentModel>;
 }
+export interface BuildExampleModel {
+  PROCESSEUR?: any;
+  REFROIDISSEMENT?: any;
+  CARTE_MERE?: any;
+  BARETTE_MEMOIRE?: any;
+  ALIMENTATION?: any;
+  DISQUE_SSD?: any;
+  DISQUE_HDD?: any;
+  DISQUE_NVME?: any;
+  STORAGE?: any;
+  VENTILATEUR?: any;
+  CARTE_GRAPHIQUE?: any;
+}
+
+export interface IBuildModel extends BuildExampleModel {
+  buildId: string;
+  dateCreated: admin.firestore.Timestamp;
+}
