@@ -19,5 +19,6 @@ export default {
   port: 3000,
   OPEN_AI_API_KEY: "",
   PROMPT_HEADER: "",
-  MEGAPC_CLIENT_API: ""
+  MEGAPC_CLIENT_API: "",
+  MEGAPC_BACKEND_API: ""
 };
