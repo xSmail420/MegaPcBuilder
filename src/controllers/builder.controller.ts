@@ -179,7 +179,7 @@ export class BuildController {
           dataComponent = await getComponentData(matchingComponent.lien, this.db);
           if (dataComponent) {
             // Assuming you want to take the first matching component
-            fullBuildData[key as keyof BuildExampleModel] = dataComponent;
+            fullBuildData[componentKey as keyof BuildExampleModel] = dataComponent;
           }
         }
       }

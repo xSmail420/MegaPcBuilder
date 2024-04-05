@@ -65,6 +65,7 @@ export interface BuildDataModel {
   STORAGE?: Partial<ComponentModel>;
   VENTILATEUR?: Partial<ComponentModel>;
   CARTE_GRAPHIQUE?: Partial<ComponentModel>;
+  BOITIER?: Partial<ComponentModel>;
 }
 export interface BuildExampleModel {
   PROCESSEUR?: any;
@@ -78,6 +79,7 @@ export interface BuildExampleModel {
   STORAGE?: any;
   VENTILATEUR?: any;
   CARTE_GRAPHIQUE?: any;
+  BOITIER?: any;
 }
 
 export interface IBuildModel extends BuildExampleModel {
