@@ -33,7 +33,6 @@ async function fetchComponentData(
     const components: ComponentModel[] = response.data.map((item: any) => ({
       title_fr: item.title_fr,
       price: item.price,
-      stock: item.stock,
       lien: item.lien,
       nFilsCategs: item.nFilsCategs[0],
     }));
@@ -53,7 +52,6 @@ export async function getComponentData(
     const componentRef = db.collection("Components").doc(lien);
     const componentDoc = await componentRef.get();
     console.log("componentDoc", componentDoc.data());
-    
 
     // Extract relevant information from the response and map it to ComponentModel interface
     const component = componentDoc.data();
@@ -66,16 +64,14 @@ export async function getComponentData(
 }
 
 export const componentTypes = [
-  "PROCESSEUR",
-  "REFROIDISSEMENT",
-  "CARTE MÈRE",
-  "BARETTE MÉMOIRE",
-  "ALIMENTATION",
-  "DISQUE-SSD",
-  "DISQUE-HDD",
-  "DISQUE-NVME",
-  "VENTILATEUR",
-  "CARTE GRAPHIQUE",
+  "PROCESSEUR", // CPU
+  "CARTE MÈRE", // Motherboard
+  "BARETTE MÉMOIRE", // RAM
+  "ALIMENTATION", // POWER SUPPLIES
+  "DISQUE-SSD",   // STOCKAGE
+  "DISQUE-NVME", //
+  "CARTE GRAPHIQUE", // GPU
+  "BOITIER", // Case
 ];
 // Define a function to filter components by price range
 export async function filterComponentsByBudget(
@@ -87,14 +83,13 @@ export async function filterComponentsByBudget(
   // Define budget allocation percentages for each component type
   const budgetPercentages: BudgetPercentages = {
     PROCESSEUR: { min: 0.15, max: 0.3 }, // Processor/CPU
-    REFROIDISSEMENT: { min: 0.05, max: 0.12 }, // Cooling solution
     "CARTE MÈRE": { min: 0.08, max: 0.15 }, // Motherboard
     "BARETTE MÉMOIRE": { min: 0.05, max: 0.15 }, // Memory/RAM
     ALIMENTATION: { min: 0.03, max: 0.15 }, // Power Supply Unit (PSU)
     "DISQUE-SSD": { min: 0.01, max: 0.25 }, // Solid State Drive (SSD)
     "DISQUE-HDD": { min: 0.03, max: 0.1 }, // Hard Disk Drive (HDD)
     "DISQUE-NVME": { min: 0.03, max: 0.1 }, // NVMe SSD
-    VENTILATEUR: { min: 0.03, max: 0.07 }, // Additional case fans or CPU cooling
+    BOITIER: { min: 0.15, max: 0.3 }, // Case
     "CARTE GRAPHIQUE": { min: 0.15, max: 0.3 }, // Graphics Card (GPU)
   };
 
@@ -114,6 +109,10 @@ export async function filterComponentsByBudget(
 
     // Filter components based on their prices falling within the respective price ranges for the current component type
     const filteredComponentsForType = components.filter((component) => {
+      // Filter components that are not SSD or NVMe
+      if (component.nFilsCategs && ["DISQUE-SSD", "DISQUE-NVME"].includes(component.nFilsCategs)) {
+        return true;
+      }
       const price = component.price;
       return price >= priceRange.min && price <= priceRange.max;
     });
