@@ -16,21 +16,46 @@ async function fetchComponentData(
   db: Firestore
 ): Promise<ComponentModel[]> {
   try {
-    const response = await axios.post(
-      `${config.get("MEGAPC_CLIENT_API")}/produit/byPaginationNew`,
-      {
-        filscateg: { titre: componentType },
-      }
-    );
+    let data;
+    if (
+      ["DISQUE-SSD", "DISQUE-NVME", "DISQUE-SSD", "STORAGE"].includes(
+        componentType
+      )
+    ) {
+      const StorageRef = [
+        "MSI-SPATIUM-M480-PRO-2TO-PCIE-4-0-NVME-M-2",
+        "Seagate-BarraCuda-1To-7200RPM",
+        "MSI-SPATIUM-M371-1TB",
+        "MSI-SPATIUM-M371-500GB",
+        "MSI-SPATIUM-S270-480-GB",
+        "GIGABYTE-GEN3-2500E-SSD-NVME-500-GB",
+      ];
 
-    response.data.map(async (item: any) => {
-      //save in firestore
-      const buildRef = db.collection("Components").doc(item.lien);
-      await buildRef.set(item);
-    });
+      let i = [];
+      for (const disk of StorageRef) {
+        const r = await getComponentData(disk, db);
+        i.push(r);
+      }
+      data = i;
+    } else {
+      const response = await axios.post(
+        `${config.get("MEGAPC_CLIENT_API")}/produit/byPaginationNew`,
+        {
+          filscateg: { titre: componentType },
+        }
+      );
+
+      response.data.map(async (item: any) => {
+        //save in firestore
+        const buildRef = db.collection("Components").doc(item.lien);
+        await buildRef.set(item);
+      });
+
+      data = response.data;
+    }
 
     // Extract relevant information from the response and map it to ComponentModel interface
-    const components: ComponentModel[] = response.data.map((item: any) => ({
+    const components: ComponentModel[] = data.map((item: any) => ({
       title_fr: item.title_fr,
       price: item.price,
       lien: item.lien,
@@ -51,7 +76,6 @@ export async function getComponentData(
   try {
     const componentRef = db.collection("Components").doc(lien);
     const componentDoc = await componentRef.get();
-    console.log("componentDoc", componentDoc.data());
 
     // Extract relevant information from the response and map it to ComponentModel interface
     const component = componentDoc.data();
@@ -68,8 +92,7 @@ export const componentTypes = [
   "CARTE MÈRE", // Motherboard
   "BARETTE MÉMOIRE", // RAM
   "ALIMENTATION", // POWER SUPPLIES
-  "DISQUE-SSD",   // STOCKAGE
-  "DISQUE-NVME", //
+  "STORAGE", // STOCKAGE
   "CARTE GRAPHIQUE", // GPU
   "BOITIER", // Case
 ];
@@ -80,17 +103,18 @@ export async function filterComponentsByBudget(
 ): Promise<{ [key: string]: ComponentModel[] }> {
   const filteredComponents: { [key: string]: ComponentModel[] } = {};
 
-  // Define budget allocation percentages for each component type
   const budgetPercentages: BudgetPercentages = {
-    PROCESSEUR: { min: 0.15, max: 0.3 }, // Processor/CPU
-    "CARTE MÈRE": { min: 0.08, max: 0.15 }, // Motherboard
-    "BARETTE MÉMOIRE": { min: 0.05, max: 0.15 }, // Memory/RAM
-    ALIMENTATION: { min: 0.03, max: 0.15 }, // Power Supply Unit (PSU)
-    "DISQUE-SSD": { min: 0.01, max: 0.25 }, // Solid State Drive (SSD)
-    "DISQUE-HDD": { min: 0.03, max: 0.1 }, // Hard Disk Drive (HDD)
-    "DISQUE-NVME": { min: 0.03, max: 0.1 }, // NVMe SSD
-    BOITIER: { min: 0.15, max: 0.3 }, // Case
-    "CARTE GRAPHIQUE": { min: 0.15, max: 0.3 }, // Graphics Card (GPU)
+    PROCESSEUR: { min: 0.1293, max: 0.3009 }, // Processor/CPU
+    "CARTE MÈRE": { min: 0.0804, max: 0.1417 }, // Motherboard
+    "BARETTE MÉMOIRE": { min: 0.0479, max: 0.0978 }, // Memory/RAM
+    ALIMENTATION: { min: 0.0395, max: 0.0746 }, // Power Supply Unit (PSU)
+    "DISQUE-SSD": { min: 0.0549, max: 0.1396 }, // Solid State Drive (SSD)
+    "DISQUE-HDD": { min: 0.0549, max: 0.1291 }, // Hard Disk Drive (HDD)
+    "DISQUE-NVME": { min: 0.0549, max: 0.0898 }, // NVMe SSD
+    STORAGE: { min: 0.0549, max: 0.0898 }, // NVMe SSD
+    BOITIER: { min: 0.0549, max: 0.0805 }, // Additional case fans or CPU cooling
+    "CARTE GRAPHIQUE": { min: 0.1293, max: 0.3017 }, // Graphics Card
+    // Graphics Card (GPU)
   };
 
   // Iterate over each component type and fetch component data
@@ -110,7 +134,12 @@ export async function filterComponentsByBudget(
     // Filter components based on their prices falling within the respective price ranges for the current component type
     const filteredComponentsForType = components.filter((component) => {
       // Filter components that are not SSD or NVMe
-      if (component.nFilsCategs && ["DISQUE-SSD", "DISQUE-NVME"].includes(component.nFilsCategs)) {
+      if (
+        component.nFilsCategs &&
+        ["DISQUE-SSD", "DISQUE-NVME", "DISQUE-SSD", "STORAGE"].includes(
+          component.nFilsCategs
+        )
+      ) {
         return true;
       }
       const price = component.price;

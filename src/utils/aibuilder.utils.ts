@@ -26,6 +26,7 @@ export async function generateComputerBuild(
         AI assistant will not mismatch a components type with another from the context.
         AI assistant will not invent anything that is not drawn directly from the context.
         AI assistant will always use the USERINPUT BLOCK to satisfy the user's needs.
+        AI assistant will always respect the USER budget and tries to be as close to the budget as possible.
         The users "prefs" are his preferences for the build along with the rest of the components.
 
         START USERINPUT BLOCK
