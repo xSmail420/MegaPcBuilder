@@ -3,7 +3,12 @@ import { v4 as uuidv4 } from "uuid";
 import * as admin from "firebase-admin";
 import { Firestore } from "@google-cloud/firestore";
 import { ResponseUtils } from "../utils/response.utils";
-import { BuildDataModel, BuildExampleModel, BuildModel, IBuildModel } from "../models/build.model";
+import {
+  BuildDataModel,
+  BuildExampleModel,
+  BuildModel,
+  IBuildModel,
+} from "../models/build.model";
 import { generateComputerBuild } from "../utils/aibuilder.utils";
 import {
   componentTypes,
@@ -176,10 +181,14 @@ export class BuildController {
           if (!matchingComponent) {
             continue;
           }
-          dataComponent = await getComponentData(matchingComponent.lien, this.db);
+          dataComponent = await getComponentData(
+            matchingComponent.lien,
+            this.db
+          );
           if (dataComponent) {
             // Assuming you want to take the first matching component
-            fullBuildData[componentKey as keyof BuildExampleModel] = dataComponent;
+            fullBuildData[componentKey as keyof BuildExampleModel] =
+              dataComponent;
           }
         }
       }
@@ -211,7 +220,7 @@ export class BuildController {
   async createBuild(req: Request, res: Response) {
     try {
       const buildId = uuidv4();
-      const buildData: BuildModel = {
+      const buildData: IBuildModel = {
         buildId: buildId,
         PROCESSEUR: req.body.PROCESSEUR,
         REFROIDISSEMENT: req.body.REFROIDISSEMENT,
@@ -281,7 +290,7 @@ export class BuildController {
   async updateBuild(req: Request, res: Response) {
     try {
       const buildId = req.params.build_id;
-      const buildData: Partial<BuildModel> = {
+      const buildData: Partial<IBuildModel> = {
         PROCESSEUR: req.body.PROCESSEUR,
         REFROIDISSEMENT: req.body.REFROIDISSEMENT,
         CARTE_MERE: req.body.CARTE_MERE,

@@ -93,6 +93,7 @@ export const componentTypes = [
   "BARETTE MÉMOIRE", // RAM
   "ALIMENTATION", // POWER SUPPLIES
   "STORAGE", // STOCKAGE
+  "REFROIDISSEMENT", // COOLING
   "CARTE GRAPHIQUE", // GPU
   "BOITIER", // Case
 ];
@@ -104,17 +105,17 @@ export async function filterComponentsByBudget(
   const filteredComponents: { [key: string]: ComponentModel[] } = {};
 
   const budgetPercentages: BudgetPercentages = {
-    PROCESSEUR: { min: 0.1293, max: 0.3009 }, // Processor/CPU
-    "CARTE MÈRE": { min: 0.0804, max: 0.1417 }, // Motherboard
-    "BARETTE MÉMOIRE": { min: 0.0479, max: 0.0978 }, // Memory/RAM
-    ALIMENTATION: { min: 0.0395, max: 0.0746 }, // Power Supply Unit (PSU)
-    "DISQUE-SSD": { min: 0.0549, max: 0.1396 }, // Solid State Drive (SSD)
-    "DISQUE-HDD": { min: 0.0549, max: 0.1291 }, // Hard Disk Drive (HDD)
-    "DISQUE-NVME": { min: 0.0549, max: 0.0898 }, // NVMe SSD
-    STORAGE: { min: 0.0549, max: 0.0898 }, // NVMe SSD
-    BOITIER: { min: 0.0549, max: 0.0805 }, // Additional case fans or CPU cooling
-    "CARTE GRAPHIQUE": { min: 0.1293, max: 0.3017 }, // Graphics Card
-    // Graphics Card (GPU)
+    PROCESSEUR: { min: 0.1517, max: 0.2909 }, // Processor (CPU)
+    "CARTE GRAPHIQUE": { min: 0.1517, max: 0.2909 }, // Graphics Card (GPU)
+    "CARTE MÈRE": { min: 0.0816, max: 0.1517 }, // Motherboard
+    "BARETTE MÉMOIRE": { min: 0.0816, max: 0.1517 }, // Memory (RAM)
+    ALIMENTATION: { min: 0.0445, max: 0.0816 }, // Power Supply Unit (PSU)
+    REFROIDISSEMENT: { min: 0.0445, max: 0.1174 }, // Cooling
+    BOITIER: { min: 0.0445, max: 0.0816 }, //  case 
+    STORAGE: { min: 0.0816, max: 0.1517 }, // storage
+    "DISQUE-SSD": { min: 0.0716, max: 0.1417 }, // Solid State Drive (SSD)
+    "DISQUE-HDD": { min: 0.0716, max: 0.1417 }, // Hard Disk Drive (HDD)
+    "DISQUE-NVME": { min: 0.0716, max: 0.1417 }, // NVMe SSD
   };
 
   // Iterate over each component type and fetch component data

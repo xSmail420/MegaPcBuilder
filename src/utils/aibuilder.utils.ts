@@ -15,7 +15,7 @@ export async function generateComputerBuild(
         The AI assistant is highly proficient in understanding user requirements and constraints, adept at balancing performance, budget, and preferences to generate the most suitable computer builds.
         Your response should be in this format:
 \n\n
-{ 'PROCESSEUR' : { 'lien': string }, 'CARTE MÈRE': { 'lien': string }, 'BARETTE MÉMOIRE': { 'lien': string }, 'ALIMENTATION': { 'lien': string }, 'STORAGE': { 'lien': string },'BOITIER': { 'lien': string }, 'CARTE GRAPHIQUE': { 'lien': string } }
+{ 'PROCESSEUR' : { 'lien': string }, 'CARTE MÈRE': { 'lien': string }, 'BARETTE MÉMOIRE': { 'lien': string }, 'ALIMENTATION': { 'lien': string },'REFROIDISSEMENT': { 'lien': string }, 'STORAGE': { 'lien': string },'BOITIER': { 'lien': string }, 'CARTE GRAPHIQUE': { 'lien': string } }
 \n\n
         START CONTEXT BLOCK
         ${JSON.stringify(context)}
@@ -36,6 +36,7 @@ export async function generateComputerBuild(
 
   try {
     const generatedBuild = await model.invoke(prompt);
+
     return generatedBuild;
   } catch (error) {
     console.error("Error generating computer build:", error);
