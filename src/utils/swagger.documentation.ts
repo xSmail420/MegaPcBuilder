@@ -7,7 +7,7 @@ const options: swaggerJsDoc.Options = {
     definition: {
         openapi: "3.0.0",
         info: {
-            title: "AstroBot API Docs",
+            title: "MegaPc AI Builder API Docs",
             version
         },
     },
