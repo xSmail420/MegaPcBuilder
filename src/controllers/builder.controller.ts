@@ -130,69 +130,38 @@ export class BuildController {
         prefs: req.body.prefs || "",
       };
 
-      // Filter components by budget
-      const filteredComponents = await filterComponentsByBudget(
-        userInput.budget,
-        this.db
-      );
-
       // Generate computer build using OpenAI API and filteredComponents as context
-      const generatedBuild = await generateComputerBuild(
-        filteredComponents,
-        userInput
-      );
+      const generatedBuild = await generateComputerBuild(userInput, this.db);
 
       // Create build data
       const buildId = uuidv4();
 
-      // Process and clean OpenAI LLM response
-      const cleanedJsonString = generatedBuild.trim().replace(/'/g, '"');
-
-      // Parse the JSON string into an object
-      const buildData: Partial<BuildModel> = JSON.parse(cleanedJsonString);
-
       // Initialize fullBuildData with buildId
+
+      if (!generatedBuild) {
+        return ResponseUtils.sendErrorResponse(
+          res,
+          500,
+          "Error generating build",
+          null
+        );
+      }
+      // calculate total price
+      let totalPrice = 0;
+
+      // Iterate over each component in the generatedBuild and sum up their prices
+      Object.values(generatedBuild).forEach((component: any) => {
+        if (component && component.price) {
+          totalPrice += component.price;
+        }
+      });
+
       const fullBuildData: Partial<IBuildModel> = {
         buildId: buildId,
         dateCreated: admin.firestore.Timestamp.now(),
+        ...generatedBuild,
+        price: totalPrice,
       };
-      // Extract components in buildData out of filteredComponents
-      for (const key of componentTypes) {
-        let componentKey = key;
-        if (["DISQUE-SSD", "DISQUE-HDD", "DISQUE-NVME"].includes(key)) {
-          componentKey = "STORAGE";
-        }
-
-        const component = buildData[componentKey as keyof BuildDataModel];
-
-        if (component && component.lien) {
-          const componentLien = component.lien;
-          let matchingComponent;
-          let dataComponent;
-          for (let item of filteredComponents[key]) {
-            if (
-              item.lien.replace(/-/g, " ").toLowerCase() ===
-              componentLien.replace(/-/g, " ").toLowerCase()
-            ) {
-              matchingComponent = item;
-              break;
-            }
-          }
-          if (!matchingComponent) {
-            continue;
-          }
-          dataComponent = await getComponentData(
-            matchingComponent.lien,
-            this.db
-          );
-          if (dataComponent) {
-            // Assuming you want to take the first matching component
-            fullBuildData[componentKey as keyof BuildExampleModel] =
-              dataComponent;
-          }
-        }
-      }
-
       // Save build data to Firestore
       const buildRef = this.db.collection("builds").doc(buildId);
       await buildRef.set(fullBuildData);
@@ -224,15 +193,17 @@ export class BuildController {
         buildId: buildId,
         PROCESSEUR: req.body.PROCESSEUR,
         REFROIDISSEMENT: req.body.REFROIDISSEMENT,
-        CARTE_MERE: req.body.CARTE_MERE,
-        BARETTE_MEMOIRE: req.body.BARETTE_MEMOIRE,
+        "CARTE MÈRE": req.body.CARTE_MERE,
+        "BARETTE MÉMOIRE": req.body.BARETTE_MEMOIRE,
         ALIMENTATION: req.body.ALIMENTATION,
-        DISQUE_SSD: req.body.DISQUE_SSD,
-        DISQUE_HDD: req.body.DISQUE_HDD,
-        DISQUE_NVME: req.body.DISQUE_NVME,
+        "DISQUE-SSD": req.body.DISQUE_SSD,
+        "DISQUE-HDD": req.body.DISQUE_HDD,
+        "DISQUE-NVME": req.body.DISQUE_NVME,
         VENTILATEUR: req.body.VENTILATEUR,
-        CARTE_GRAPHIQUE: req.body.CARTE_GRAPHIQUE,
+        "CARTE GRAPHIQUE": req.body.CARTE_GRAPHIQUE,
         dateCreated: admin.firestore.Timestamp.now(),
+        dateModified: admin.firestore.Timestamp.now(),
+        price: req.body.price,
       };
 
       // Saving build to firestore
@@ -293,14 +264,16 @@ export class BuildController {
       const buildData: Partial<IBuildModel> = {
         PROCESSEUR: req.body.PROCESSEUR,
         REFROIDISSEMENT: req.body.REFROIDISSEMENT,
-        CARTE_MERE: req.body.CARTE_MERE,
-        BARETTE_MEMOIRE: req.body.BARETTE_MEMOIRE,
+        "CARTE MÈRE": req.body.CARTE_MERE,
+        "BARETTE MÉMOIRE": req.body.BARETTE_MEMOIRE,
         ALIMENTATION: req.body.ALIMENTATION,
-        DISQUE_SSD: req.body.DISQUE_SSD,
-        DISQUE_HDD: req.body.DISQUE_HDD,
-        DISQUE_NVME: req.body.DISQUE_NVME,
+        "DISQUE-SSD": req.body.DISQUE_SSD,
+        "DISQUE-HDD": req.body.DISQUE_HDD,
+        "DISQUE-NVME": req.body.DISQUE_NVME,
         VENTILATEUR: req.body.VENTILATEUR,
-        CARTE_GRAPHIQUE: req.body.CARTE_GRAPHIQUE,
+        "CARTE GRAPHIQUE": req.body.CARTE_GRAPHIQUE,
+        dateModified: admin.firestore.Timestamp.now(),
+        price: req.body.price,
       };
 
       const buildRef = this.db.collection("builds").doc(buildId);

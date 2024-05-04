@@ -20,9 +20,6 @@
  */
 
 export interface ComponentModel {
-  title_fr: string;
   price: number;
   lien: string;
-  nFilsCategs?: string;
-  attributes?: any;
 }

@@ -56,33 +56,35 @@ export interface BuildModel extends BuildDataModel {
 export interface BuildDataModel {
   PROCESSEUR?: Partial<ComponentModel>;
   REFROIDISSEMENT?: Partial<ComponentModel>;
-  CARTE_MERE?: Partial<ComponentModel>;
-  BARETTE_MEMOIRE?: Partial<ComponentModel>;
+  "CARTE MÈRE"?: Partial<ComponentModel>;
+  "BARETTE MÉMOIRE"?: Partial<ComponentModel>;
   ALIMENTATION?: Partial<ComponentModel>;
-  DISQUE_SSD?: Partial<ComponentModel>;
-  DISQUE_HDD?: Partial<ComponentModel>;
-  DISQUE_NVME?: Partial<ComponentModel>;
+  "DISQUE-SSD"?: Partial<ComponentModel>;
+  "DISQUE-HDD"?: Partial<ComponentModel>;
+  "DISQUE-NVME"?: Partial<ComponentModel>;
   STORAGE?: Partial<ComponentModel>;
   VENTILATEUR?: Partial<ComponentModel>;
-  CARTE_GRAPHIQUE?: Partial<ComponentModel>;
+  "CARTE GRAPHIQUE"?: Partial<ComponentModel>;
   BOITIER?: Partial<ComponentModel>;
 }
 export interface BuildExampleModel {
   PROCESSEUR?: any;
   REFROIDISSEMENT?: any;
-  CARTE_MERE?: any;
-  BARETTE_MEMOIRE?: any;
+  "CARTE MÈRE"?: any;
+  "BARETTE MÉMOIRE"?: any;
   ALIMENTATION?: any;
-  DISQUE_SSD?: any;
-  DISQUE_HDD?: any;
-  DISQUE_NVME?: any;
+  "DISQUE-SSD"?: any;
+  "DISQUE-HDD"?: any;
+  "DISQUE-NVME"?: any;
   STORAGE?: any;
   VENTILATEUR?: any;
-  CARTE_GRAPHIQUE?: any;
+  "CARTE GRAPHIQUE"?: any;
   BOITIER?: any;
 }
 
 export interface IBuildModel extends BuildExampleModel {
   buildId: string;
   dateCreated: admin.firestore.Timestamp;
+  price: number;
+  dateModified : admin.firestore.Timestamp;
 }
