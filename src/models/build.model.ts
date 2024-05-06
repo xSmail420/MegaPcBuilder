@@ -85,6 +85,8 @@ export interface BuildExampleModel {
 export interface IBuildModel extends BuildExampleModel {
   buildId: string;
   dateCreated: admin.firestore.Timestamp;
-  price: number;
-  dateModified : admin.firestore.Timestamp;
+  price?: number;
+  dateModified? : admin.firestore.Timestamp;
+  userId?: string;
+  buildName?: string;
 }

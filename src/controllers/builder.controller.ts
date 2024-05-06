@@ -15,6 +15,7 @@ import {
   filterComponentsByBudget,
   getComponentData,
 } from "../utils/components.utils";
+import { userInfo } from "os";
 
 export class BuildController {
   constructor(private db: Firestore) {}
@@ -191,23 +192,25 @@ export class BuildController {
       const buildId = uuidv4();
       const buildData: IBuildModel = {
         buildId: buildId,
-        PROCESSEUR: req.body.PROCESSEUR,
-        REFROIDISSEMENT: req.body.REFROIDISSEMENT,
-        "CARTE MÈRE": req.body.CARTE_MERE,
-        "BARETTE MÉMOIRE": req.body.BARETTE_MEMOIRE,
-        ALIMENTATION: req.body.ALIMENTATION,
-        "DISQUE-SSD": req.body.DISQUE_SSD,
-        "DISQUE-HDD": req.body.DISQUE_HDD,
-        "DISQUE-NVME": req.body.DISQUE_NVME,
-        VENTILATEUR: req.body.VENTILATEUR,
-        "CARTE GRAPHIQUE": req.body.CARTE_GRAPHIQUE,
+        PROCESSEUR: req.body.data.cpu,
+        REFROIDISSEMENT: req.body.data.cooling,
+        "CARTE MÈRE": req.body.data.motherboard,
+        "BARETTE MÉMOIRE": req.body.data.ram,
+        ALIMENTATION: req.body.data.powersupply,
+        "CARTE GRAPHIQUE": req.body.data.gpu,
+        BOITIER: req.body.data.pccase,
+        STORAGE: req.body.data.storage,
         dateCreated: admin.firestore.Timestamp.now(),
         dateModified: admin.firestore.Timestamp.now(),
         price: req.body.price,
+        userId: req.body.userId,
+        buildName: req.body.name,
       };
 
-      // Saving build to firestore
-      const buildRef = this.db.collection("builds").doc(buildId);
+      const userId = req.body.userId || "default";
+
+      // Saving build to firestore under userId
+      const buildRef = this.db.collection(userId).doc(buildId);
       await buildRef.set(buildData);
 
       return ResponseUtils.sendSuccessResponse(
