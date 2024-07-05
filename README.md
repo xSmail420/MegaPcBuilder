@@ -1,4 +1,4 @@
-# Express TypeScript API with Firebase Integration
+# MegaPc AI Builder: Express TypeScript OpenAi API with Firebase Integration
 
 This project is an Express.js API built with TypeScript and integrates with Firebase. The API provides endpoints for user management and build generation using AI.
 
