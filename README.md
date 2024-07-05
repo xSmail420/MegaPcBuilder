@@ -31,35 +31,35 @@ Before you begin, ensure you have met the following requirements:
    cd your-repo
 Install dependencies:
 
-bash
-Copy code
+```bash
 npm install
-Configuration
+```
+
+## Configuration
 Create a .env file in the root directory and add your Firebase configuration and other environment variables:
 
-plaintext
-Copy code
+```bash
 FIREBASE_PROJECT_ID=your-firebase-project-id
 FIREBASE_CLIENT_EMAIL=your-firebase-client-email
 FIREBASE_PRIVATE_KEY=your-firebase-private-key
 OPENAI_API_KEY=your-openai-api-key
+```
 Initialize Firebase Admin SDK in your project.
 
-Scripts
+## Scripts
 start: Runs the application in production mode.
 dev: Runs the application in development mode with hot reloading.
 build: Compiles TypeScript files to JavaScript.
 To run a script, use:
 
-bash
-Copy code
+## bash
+
 npm run <script-name>
 API Documentation
 API documentation is generated using OpenAPI (Swagger). To view the API documentation, start the server and navigate to /api-docs.
 
-Project Structure
-plaintext
-Copy code
+## Project Structure
+```bash
 |-- src
 |   |-- controllers
 |   |   |-- build.controller.ts
@@ -79,64 +79,58 @@ Copy code
 |-- package.json
 |-- tsconfig.json
 |-- README.md
-Endpoints
-User Endpoints
+```
+## Endpoints
+### User Endpoints
+
 Create User
-
-plaintext
-Copy code
+```bash
 POST /api/v1/users
+```
 Delete User
-
-plaintext
-Copy code
+```bash
 DELETE /api/v1/users/{user_id}
+```
 Get User Data
-
-plaintext
-Copy code
+```bash
 GET /api/v1/users/{user_id}
+```
 Update User Data
-
-plaintext
-Copy code
+```bash
 PUT /api/v1/users/{user_id}
+```
 Get All Users
-
-plaintext
-Copy code
+```bash
 GET /api/v1/users
-Build Endpoints
+```
+
+### Build Endpoints
 Create Build
-
-plaintext
-Copy code
+```bash
 POST /api/v1/builds
+```
+
 Delete Build
-
-plaintext
-Copy code
+```bash
 DELETE /api/v1/builds/{build_id}
+```
+
 Get Build Data
-
-plaintext
-Copy code
+```bash
 GET /api/v1/builds/{build_id}
+```
 Update Build Data
-
-plaintext
-Copy code
+```bash
 PUT /api/v1/builds/{build_id}
+```
 Get All Builds
-
-plaintext
-Copy code
+```bash
 GET /api/v1/builds
+```
 Generate Build Using AI
-
-plaintext
-Copy code
+```bash
 POST /api/v1/aibuilder
+```
 Contributing
 Contributions are welcome! Please follow these steps:
 
