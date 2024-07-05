@@ -35,13 +35,30 @@ npm install
 ```
 
 ## Configuration
-1. Create a .env file in the root directory and add your Firebase configuration and other environment variables:
+1. Edit the config/default.ts file and add your Firebase configuration and other environment variables:
 
 ```bash
-FIREBASE_PROJECT_ID=your-firebase-project-id
-FIREBASE_CLIENT_EMAIL=your-firebase-client-email
-FIREBASE_PRIVATE_KEY=your-firebase-private-key
-OPENAI_API_KEY=your-openai-api-key
+export default {
+  firebaseCredential: {
+    type: "",
+    project_id: "",
+    private_key_id: "",
+    private_key: "",
+    client_email: "",
+    client_id: "",
+    auth_uri: "",
+    token_uri: "",
+    auth_provider_x509_cert_url: "",
+    client_x509_cert_url: "",
+    universe_domain: "",
+  },
+  databaseURL: "",
+  port: 3000,
+  OPEN_AI_API_KEY: "",
+  PROMPT_HEADER: "",
+  MEGAPC_CLIENT_API: "",
+  MEGAPC_BACKEND_API: ""
+};
 ```
 2. Initialize Firebase Admin SDK in your project.
 
