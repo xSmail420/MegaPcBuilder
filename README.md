@@ -12,7 +12,6 @@ This project is an Express.js API built with TypeScript and integrates with Fire
 - [Project Structure](#project-structure)
 - [Endpoints](#endpoints)
 - [Contributing](#contributing)
-- [License](#license)
 
 ## Prerequisites
 
@@ -36,7 +35,7 @@ npm install
 ```
 
 ## Configuration
-Create a .env file in the root directory and add your Firebase configuration and other environment variables:
+1. Create a .env file in the root directory and add your Firebase configuration and other environment variables:
 
 ```bash
 FIREBASE_PROJECT_ID=your-firebase-project-id
@@ -44,41 +43,45 @@ FIREBASE_CLIENT_EMAIL=your-firebase-client-email
 FIREBASE_PRIVATE_KEY=your-firebase-private-key
 OPENAI_API_KEY=your-openai-api-key
 ```
-Initialize Firebase Admin SDK in your project.
+2. Initialize Firebase Admin SDK in your project.
 
 ## Scripts
-start: Runs the application in production mode.
-dev: Runs the application in development mode with hot reloading.
-build: Compiles TypeScript files to JavaScript.
+`start`: Runs the application in production mode.
+`dev`: Runs the application in development mode with hot reloading.
+`build`: Compiles TypeScript files to JavaScript.
 To run a script, use:
 
-## bash
-
+```bash
 npm run <script-name>
-API Documentation
+```
+## API Documentation
 API documentation is generated using OpenAPI (Swagger). To view the API documentation, start the server and navigate to /api-docs.
 
 ## Project Structure
+
 ```bash
+|-- config
+|   |-- default.example.ts
 |-- src
 |   |-- controllers
-|   |   |-- build.controller.ts
-|   |   |-- user.controller.ts
+|   |   |-- builder.controller.ts
 |   |-- models
 |   |   |-- build.model.ts
-|   |   |-- user.model.ts
-|   |-- routes
-|   |   |-- build.route.ts
-|   |   |-- user.route.ts
+|   |   |-- component.module.ts
 |   |-- utils
+|   |   |-- aibuilder.utils.ts
+|   |   |-- components.utils.ts
+|   |   |-- firebase.connect.ts
 |   |   |-- response.utils.ts
+|   |   |-- swagger.documentation.ts
 |   |-- app.ts
-|   |-- index.ts
-|-- .env
+|   |-- routes.ts
 |-- .gitignore
+|-- Dockerfile
+|-- README.md
+|-- package-lock.json
 |-- package.json
 |-- tsconfig.json
-|-- README.md
 ```
 ## Endpoints
 ### User Endpoints
@@ -131,12 +134,12 @@ Generate Build Using AI
 ```bash
 POST /api/v1/aibuilder
 ```
-Contributing
+## Contributing
 Contributions are welcome! Please follow these steps:
 
-Fork the repository.
-Create a new branch (git checkout -b feature-branch).
-Make your changes.
-Commit your changes (git commit -m 'Add some feature').
-Push to the branch (git push origin feature-branch).
-Open a Pull Request.
+1. Fork the repository.
+2. Create a new branch (git checkout -b feature-branch).
+3. Make your changes.
+4. Commit your changes (git commit -m 'Add some feature').
+5. Push to the branch (git push origin feature-branch).
+6. Open a Pull Request.
